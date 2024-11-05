@@ -13,33 +13,34 @@
         <p>Biểu đồ giá 7 ngày gần nhất</p>
         <div id="price-display">$69522.41</div>
         <div id="percentage-change">▲ 3.91%</div>
+        <!-- Nút hamburger bên cạnh nút ẩn hiện candlestick -->
         <div class="flexbox">
             <button id="update-btn">Cập nhật</button>
             <button id="candlestick" class="ml-4">
                 <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462638866_2123692391398369_7837515212197580849_n.png?stp=dst-png_s480x480&_nc_cat=101&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeFtw09vNgMEluBULZAonGzUjJArVvkIpryMkCtW-QimvOA30rvSS1VqmozJJp_KbdvJQkjFqEFwvGErrvS-zzwj&_nc_ohc=E9PEHqrtVpIQ7kNvgHJOEpi&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&oh=03_Q7cD1QEQqEVGjDGwnvSKoqEnmbOG8yd_egVauQlurgMXOuYamg&oe=67509D66" alt="Candlestick Icon" style="width:20px; height:20px;">
             </button>
-            <!-- Hamburger menu with time options -->
-            <div class="dropdown ml-4">
-                <span class="hamburger-icon">☰</span>
-                <div class="dropdown-content">
-                    <a href="#" data-timeframe="1s">1s</a>
-                    <a href="#" data-timeframe="1m">1m</a>
-                    <a href="#" data-timeframe="3m">3m</a>
-                    <a href="#" data-timeframe="5m">5m</a>
-                    <a href="#" data-timeframe="15m">15m</a>
-                    <a href="#" data-timeframe="30m">30m</a>
-                    <a href="#" data-timeframe="1h">1h</a>
-                    <a href="#" data-timeframe="2h">2h</a>
-                    <a href="#" data-timeframe="4h">4h</a>
-                    <a href="#" data-timeframe="6h">6h</a>
-                    <a href="#" data-timeframe="8h">8h</a>
-                    <a href="#" data-timeframe="12h">12h</a>
-                    <a href="#" data-timeframe="1d">1d</a>
-                    <a href="#" data-timeframe="3d">3d</a>
-                    <a href="#" data-timeframe="1w">1w</a>
-                    <a href="#" data-timeframe="1M">1M</a>
+            <!-- Nút hamburger và menu con -->
+            <div class="hamburger-container">
+                <button id="hamburger-menu">☰</button>
+                <div id="timeframe-options" class="dropdown-content">
+                    <button onclick="selectTimeframe('1s')">1s</button>
+                    <button onclick="selectTimeframe('1m')">1m</button>
+                    <button onclick="selectTimeframe('3m')">3m</button>
+                    <button onclick="selectTimeframe('5m')">5m</button>
+                    <button onclick="selectTimeframe('15m')">15m</button>
+                    <button onclick="selectTimeframe('30m')">30m</button>
+                    <button onclick="selectTimeframe('1h')">1h</button>
+                    <button onclick="selectTimeframe('2h')">2h</button>
+                    <button onclick="selectTimeframe('4h')">4h</button>
+                    <button onclick="selectTimeframe('6h')">6h</button>
+                    <button onclick="selectTimeframe('8h')">8h</button>
+                    <button onclick="selectTimeframe('12h')">12h</button>
+                    <button onclick="selectTimeframe('1d')">1d</button>
+                    <button onclick="selectTimeframe('3d')">3d</button>
+                    <button onclick="selectTimeframe('1w')">1w</button>
+                    <button onclick="selectTimeframe('1M')">1M</button>
                 </div>
-            </div>            
+            </div>
         </div>
         <div id="chart"></div>
     </div>

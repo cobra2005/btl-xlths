@@ -52,47 +52,55 @@ body {
     cursor: pointer;
 }
 
-/* Style for the dropdown menu */
-.dropdown {
+/* Định dạng chung */
+.hamburger-container {
     position: relative;
     display: inline-block;
+    padding: 0 4px;
 }
-.dropdown-content {
-    display: none;
+
+#hamburger-menu {
+    border-color: buttonborder;
+    border-radius: 4px;
+    padding: 3.5px 8px;
+}
+
+#timeframe-options {
+    display: none; /* Ẩn theo mặc định */
     position: absolute;
-    background-color: #333;
     height: 200px;
-    min-width: 100px;
-    z-index: 1;
+    top: 30px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 0 40px 0 0;
     border-radius: 5px;
+    z-index: 100;
     overflow-y: scroll;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
 
-.dropdown-content::-webkit-scrollbar {
+#timeframe-options::-webkit-scrollbar {
     display: none;
 }
 
-.dropdown-content a {
-    color: #e0e0e0;
-    padding: 10px 15px;
-    text-decoration: none;
+/* Hiển thị menu khi hover vào nút hamburger */
+.hamburger-container:hover #timeframe-options {
     display: block;
 }
-.dropdown-content a:hover {
-    background-color: #555;
-}
-.dropdown:hover .dropdown-content {
+
+#timeframe-options button {
     display: block;
-}
-.flexbox {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-.hamburger-icon {
-    font-size: 24px;
+    width: 100%;
+    padding: 5px 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    text-align: left;
     cursor: pointer;
-    color: #e0e0e0;
+}
+
+#timeframe-options button:hover {
+    background-color: #444;
 }

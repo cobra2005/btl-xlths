@@ -21,7 +21,7 @@
             </button>
             <!-- Nút hamburger và menu con -->
             <div class="hamburger-container ml-4">
-                <button id="hamburger-menu">☰</button>
+                <button id="timeframe-display">1m</button> <!-- Thay thế nút hamburger bằng tên khung thời gian -->
                 <div id="timeframe-options" class="dropdown-content">
                     <button onclick="selectTimeframe('1s')">1s</button>
                     <button onclick="selectTimeframe('1m')">1m</button>
@@ -41,6 +41,7 @@
                     <button onclick="selectTimeframe('1M')">1M</button>
                 </div>
             </div>
+            
         </div>
         <div id="chart"></div>
     </div>
@@ -191,6 +192,110 @@
                 { data: lowLineData }
             ]);
         });
+        // Khởi tạo trạng thái cho các khung thời gian
+        const timeframeState = {
+            '1s': false,
+            '1m': true,  // Khung thời gian mặc định
+            '3m': false,
+            '5m': false,
+            '15m': false,
+            '30m': false,
+            '1h': false,
+            '2h': false,
+            '4h': false,
+            '6h': false,
+            '8h': false,
+            '12h': false,
+            '1d': false,
+            '3d': false,
+            '1w': false,
+            '1M': false,
+        };
+
+        // Hàm để áp dụng thuộc tính CSS cho khung thời gian được chọn
+        function updateTimeframeStyles() {
+            Object.keys(timeframeState).forEach((timeframe) => {
+                const button = document.querySelector(`button[onclick="selectTimeframe('${timeframe}')"]`);
+                if (timeframeState[timeframe]) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+
+        // Hàm cập nhật tên khung thời gian đang được chọn
+        function updateActiveTimeframeName() {
+            const activeTimeframe = Object.keys(timeframeState).find((timeframe) => timeframeState[timeframe]);
+            const timeframeButton = document.getElementById('timeframe-display');
+            timeframeButton.textContent = activeTimeframe;
+        }
+
+        // Hàm cập nhật trạng thái của các khung thời gian
+        function selectTimeframe(selectedTimeframe) {
+            Object.keys(timeframeState).forEach((timeframe) => {
+                timeframeState[timeframe] = false;
+            });
+            timeframeState[selectedTimeframe] = true;
+
+            updateTimeframeStyles();
+            updateActiveTimeframeName();  // Cập nhật tên khung thời gian đang chọn
+            updateChartData(selectedTimeframe);
+}
+
+        // Hàm cập nhật dữ liệu biểu đồ và hiển thị giá, phần trăm thay đổi dựa trên khung thời gian mới
+        function updateChartData(timeframe) {
+            // Tạo dữ liệu mới ngẫu nhiên cho candlestick, high line, và low line
+            const newCandlestickData = candlestickData.map((data) => {
+                const open = data.y[0];
+                const close = open + (Math.random() - 0.5) * 500;
+                const high = Math.max(open, close) + Math.random() * 200;
+                const low = Math.min(open, close) - Math.random() * 200;
+                return { x: data.x, y: [open, high, low, close] };
+            });
+
+            // Cập nhật lại highLineData và lowLineData từ dữ liệu mới của candlestick
+            const newHighLineData = newCandlestickData.map(data => ({ x: data.x, y: data.y[1] }));
+            const newLowLineData = newCandlestickData.map(data => ({ x: data.x, y: data.y[2] }));
+
+            // Cập nhật biến dữ liệu của biểu đồ
+            candlestickData = newCandlestickData;
+            highLineData = newHighLineData;
+            lowLineData = newLowLineData;
+
+            // Cập nhật hiển thị giá và phần trăm thay đổi
+            const latestPrice = newCandlestickData[newCandlestickData.length - 1].y[3];
+            const previousPrice = newCandlestickData[newCandlestickData.length - 2].y[3];
+            const percentageChange = ((latestPrice - previousPrice) / previousPrice * 100).toFixed(2);
+
+            // Cập nhật hiển thị giá và phần trăm thay đổi
+            document.getElementById('price-display').textContent = `$${latestPrice.toFixed(2)}`;
+            document.getElementById('percentage-change').textContent = `${percentageChange >= 0 ? '▲' : '▼'} ${Math.abs(percentageChange)}%`;
+            document.getElementById('percentage-change').style.color = percentageChange >= 0 ? '#00ffcc' : '#ff6666';
+
+            // Cập nhật biểu đồ với dữ liệu mới
+            chart.updateSeries([
+                { data: isCandlestickVisible ? newCandlestickData : [] },
+                { data: newHighLineData },
+                { data: newLowLineData }
+            ]);
+        }
+
+        // Thêm class CSS cho khung thời gian được chọn
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .dropdown-content button.active {
+                background-color: #3a3a3a;
+                color: #00ffcc;
+                font-weight: bold;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Gọi hàm để thiết lập kiểu dáng ban đầu
+        updateTimeframeStyles();
+        updateActiveTimeframeName(); // Cập nhật tên khung thời gian mặc định là '1m'
+
     </script>
     <script src="script.js"></script>
 </body>

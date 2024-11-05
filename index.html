@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biểu đồ Giá Bitcoin - Giao Diện Tối</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.27.1/apexcharts.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="chart-container">
+        <h2>Giá Bitcoin (USD)</h2>
+        <p>Biểu đồ giá 7 ngày gần nhất</p>
+        <div id="price-display">$69522.41</div>
+        <div id="percentage-change">▲ 3.91%</div>
+        <div class="flexbox">
+            <button id="update-btn">Cập nhật</button>
+            <button id="candlestick" class="ml-4">
+                <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462638866_2123692391398369_7837515212197580849_n.png?stp=dst-png_s480x480&_nc_cat=101&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeFtw09vNgMEluBULZAonGzUjJArVvkIpryMkCtW-QimvOA30rvSS1VqmozJJp_KbdvJQkjFqEFwvGErrvS-zzwj&_nc_ohc=E9PEHqrtVpIQ7kNvgHJOEpi&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&oh=03_Q7cD1QEQqEVGjDGwnvSKoqEnmbOG8yd_egVauQlurgMXOuYamg&oe=67509D66" alt="Candlestick Icon" style="width:20px; height:20px;">
+            </button>
+            
+        </div>
+        <div id="chart"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.27.1/apexcharts.min.js"></script>
+    <script>
+        // Dữ liệu ban đầu cho biểu đồ candlestick
+        const initialCandlestickData = [
+            { x: "26/10/2024", y: [67000, 67500, 66500, 67200] },
+            { x: "27/10/2024", y: [67200, 68200, 67100, 68000] },
+            { x: "28/10/2024", y: [68000, 69000, 67900, 68500] },
+            { x: "29/10/2024", y: [68500, 69200, 68300, 69000] },
+            { x: "30/10/2024", y: [69000, 69500, 68800, 69200] },
+            { x: "01/11/2024", y: [69200, 70000, 69000, 69500] },
+            { x: "02/11/2024", y: [69500, 70000, 69400, 69522] }
+        ];
+
+        // Khởi tạo dữ liệu candlestick và các biến liên quan
+        let candlestickData = [...initialCandlestickData]; // Sao chép dữ liệu ban đầu
+        let isCandlestickVisible = false;
+
+        // Tạo dữ liệu highLineData và lowLineData
+        let highLineData = candlestickData.map(data => ({ x: data.x, y: data.y[1] }));
+        let lowLineData = candlestickData.map(data => ({ x: data.x, y: data.y[2] }));
+
+        // Thiết lập biểu đồ
+        const options = {
+            series: [
+                {
+                    name: 'Candlestick',
+                    type: 'candlestick',
+                    data: [] // Ẩn candlestick khi khởi tạo
+                },
+                {
+                    name: 'High Line',
+                    type: 'line',
+                    data: highLineData,
+                    color: '#00ffcc'
+                },
+                {
+                    name: 'Low Line',
+                    type: 'line',
+                    data: lowLineData,
+                    color: '#ff9933'
+                },
+            ],
+            chart: {
+                type: 'candlestick',
+                height: 300,
+                background: '#2e2e2e',
+                foreColor: '#e0e0e0'
+            },
+            xaxis: {
+                type: 'category',
+                categories: candlestickData.map(data => data.x),
+                labels: {
+                    style: {
+                        colors: '#e0e0e0'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Giá (USD)',
+                    style: {
+                        color: '#e0e0e0'
+                    }
+                },
+                labels: {
+                    formatter: function(value) {
+                        return "$" + value;
+                    },
+                    style: {
+                        colors: '#e0e0e0'
+                    }
+                }
+            },
+            stroke: {
+                width: [1, 2, 2],
+                curve: 'smooth'
+            },
+            tooltip: {
+                theme: 'dark',
+                y: {
+                    formatter: function(value) {
+                        return "$" + value;
+                    }
+                }
+            },
+            title: {
+                text: 'Giá Bitcoin (USD)',
+                align: 'left',
+                style: {
+                    color: '#e0e0e0'
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+        // Hàm cập nhật highLineData và lowLineData
+        function updateHighLowLines() {
+            highLineData = candlestickData.map(data => ({ x: data.x, y: data.y[1] }));
+            lowLineData = candlestickData.map(data => ({ x: data.x, y: data.y[2] }));
+        }
+
+        function updateChart() {
+            // Tạo dữ liệu candlestick mới ngẫu nhiên
+            candlestickData.forEach(data => {
+                const open = data.y[0];
+                const close = open + (Math.random() - 0.5) * 500; // Tạo giá close ngẫu nhiên
+                const high = Math.max(open, close) + Math.random() * 200; // Tạo giá high
+                const low = Math.min(open, close) - Math.random() * 200; // Tạo giá low
+                data.y = [open, high, low, close]; // Cập nhật dữ liệu
+            });
+
+            // Cập nhật dữ liệu high và low line
+            updateHighLowLines();
+
+            // Cập nhật giá hiển thị và phần trăm thay đổi
+            const latestPrice = candlestickData[candlestickData.length - 1].y[3];
+            const previousPrice = candlestickData[candlestickData.length - 2].y[3];
+            const percentageChange = ((latestPrice - previousPrice) / previousPrice * 100).toFixed(2);
+
+            // Cập nhật hiển thị giá và phần trăm thay đổi
+            document.getElementById('price-display').textContent = `$${latestPrice.toFixed(2)}`;
+            document.getElementById('percentage-change').textContent = `${percentageChange >= 0 ? '▲' : '▼'} ${Math.abs(percentageChange)}%`;
+            document.getElementById('percentage-change').style.color = percentageChange >= 0 ? '#00ffcc' : '#ff6666';
+
+            // Cập nhật biểu đồ với dữ liệu mới
+            chart.updateSeries([
+                { data: isCandlestickVisible ? candlestickData : [] }, // Chỉ hiển thị nếu isCandlestickVisible là true
+                { data: highLineData },
+                { data: lowLineData }
+            ]);
+        }
+
+        // Xử lý sự kiện khi nhấn nút cập nhật
+        document.getElementById('update-btn').addEventListener('click', updateChart);
+
+        // Xử lý sự kiện khi nhấn nút "Ẩn hiện" để ẩn hoặc hiện riêng phần candlestick
+        document.getElementById('candlestick').addEventListener('click', () => {
+            isCandlestickVisible = !isCandlestickVisible; // Đổi trạng thái hiển thị của candlestick
+            chart.updateSeries([
+                { data: isCandlestickVisible ? candlestickData : [] }, // Cập nhật hiển thị candlestick
+                { data: highLineData },
+                { data: lowLineData }
+            ]);
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

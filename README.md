@@ -22,4 +22,5 @@ Cách thức hoạt động: Tương tự như fetchChartData(), nhưng dành ri
 Trong đó:
 
 /api/get-line-chart-data là URL API để lấy dữ liệu biểu đồ line.
+
 updateLineChartWithData() là hàm giả định để cập nhật dữ liệu biểu đồ line.

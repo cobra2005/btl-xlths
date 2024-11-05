@@ -51,3 +51,48 @@ body {
     border-radius: 4px;
     cursor: pointer;
 }
+
+/* Style for the dropdown menu */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    height: 200px;
+    min-width: 100px;
+    z-index: 1;
+    border-radius: 5px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.dropdown-content::-webkit-scrollbar {
+    display: none;
+}
+
+.dropdown-content a {
+    color: #e0e0e0;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:hover {
+    background-color: #555;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.flexbox {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.hamburger-icon {
+    font-size: 24px;
+    cursor: pointer;
+    color: #e0e0e0;
+}
